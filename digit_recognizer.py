@@ -132,9 +132,9 @@ pass
 
 def fit(model):
     input_layer = 784
-    hidden_layer = 50
+    hidden_layer = 100
     output_layer = 10
-    _lambda = 1
+    _lambda = 100
 
     try:
         theta = joblib.load(model)
@@ -164,12 +164,12 @@ def fit(model):
 
     return theta1,theta2
 
-theta1,theta2 = fit('ann_.pkl')
+theta1,theta2 = fit('ann_100.pkl')
 
 
 
 def predict_image(image):
-    img_test = cv2.img = cv2.imread(image,0)
+    img_test =  cv2.imread(image,0)
     img_test = cv2.resize(img_test,(28,28))
     vector = img_test.flatten()
 
@@ -178,21 +178,26 @@ def predict_image(image):
     x = np.array([vector])
     print predict(theta1,theta2,x)
 
+while(True):
+    file_name = raw_input("Enter file name:(q to quit)")
+    if file_name == 'q':
+        break
+    else:
+        file_name = 'mnist/'+file_name
+        predict_image(file_name)
 
-#predict_image('mnist/2.png')
 
-
-x_test = get_test_data()
-predict_nn = predict(theta1,theta2,x_test)
-print("Predict nn .....")
-print predict_nn
-size_test = predict_nn.shape[0]
-imageId = np.array(range(1,predict_nn.shape[0]+1)).reshape(predict_nn.shape[0],1)
-data = np.concatenate((imageId,predict_nn),axis = 1)
-data = data.astype(int)
-with open("resultTR.csv", "wb") as f:
-    f.write(b'ImageId,Label\n')
-    np.savetxt(f, data , fmt='%i', delimiter=",")
+# x_test = get_test_data()
+# predict_nn = predict(theta1,theta2,x_test)
+# print("Predict nn .....")
+# print predict_nn
+# size_test = predict_nn.shape[0]
+# imageId = np.array(range(1,predict_nn.shape[0]+1)).reshape(predict_nn.shape[0],1)
+# data = np.concatenate((imageId,predict_nn),axis = 1)
+# data = data.astype(int)
+# with open("resultTR.csv", "wb") as f:
+#     f.write(b'ImageId,Label\n')
+#     np.savetxt(f, data , fmt='%i', delimiter=",")
 
 
 
