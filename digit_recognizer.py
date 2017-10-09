@@ -161,30 +161,32 @@ def fit(model):
 
     theta1 = theta[0:(hidden_layer * (input_layer + 1))].reshape([hidden_layer, input_layer + 1])
     theta2 = theta[(hidden_layer * (input_layer + 1)):].reshape([output_layer, hidden_layer + 1])
-
     return theta1,theta2
 
-theta1,theta2 = fit('ann_100.pkl')
-
-
-
-def predict_image(image):
-    img_test =  cv2.imread(image,0)
+def predict_image():
+    theta1, theta2 = fit('ann_100.pkl')
+    try:
+        img_test =  cv2.imread('temp.png',0)
+    except:
+        print "file not exist"
+        return -1
     img_test = cv2.resize(img_test,(28,28))
     vector = img_test.flatten()
-
     vector = map(lambda x: 255 - x, vector)
-    print("Predict image.")
     x = np.array([vector])
-    print predict(theta1,theta2,x)
-
-while(True):
-    file_name = raw_input("Enter file name:(q to quit)")
-    if file_name == 'q':
-        break
-    else:
-        file_name = 'mnist/'+file_name
-        predict_image(file_name)
+    pre = predict(theta1,theta2,x)
+    return pre[0,0]
+# while(True):
+#     file_name = raw_input("Enter file name:(q to quit)")
+#     if file_name == 'q':
+#         break
+#     else:
+#         file_name = 'mnist/'+file_name
+#         x = predict_image(file_name)
+#         if x == -1:
+#             print "try another file name"
+#         else:
+#             print "Predict image %d"%x
 
 
 # x_test = get_test_data()
